@@ -1,6 +1,6 @@
 {
   "name": "aea90364-standard",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "description": "Calcula y dimensiona instalaciones electricas segun AEA 90364-7-771/770/701/722 y AEA IT 90909-1. Exporta todo el calculo como JSON (<proyecto>_calculo.json) que consume sld-generator y, para el alimentador principal del tablero, la Memoria de Calculo (_MC.md) y la Sintesis de Proyecto (_SP.md) en el formato de la skill aea90364-feeder-sizing. Sin PDF.",
   "skills": [
     "./skills/feeder-sizing",
