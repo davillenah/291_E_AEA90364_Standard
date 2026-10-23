@@ -9,6 +9,7 @@ Dato faltante: "Pendiente".
 import math
 import os
 
+import aea_ampacity as AMP
 import aea_conductors as CO
 import aea_pipeline as P
 import aea_voltage_drop as VD
@@ -69,14 +70,16 @@ def verificaciones(tablero, c, reg, temp_c=70.0, k_magnetico=P.K_MAGNETICO_C):
     fp = P._num_opt(c.get("FP"), fp_def)
     largo = P._num_opt(c.get("LONGITUD_m"), 0.0)
     s = reg["S"]
-    r = CO.resistencia_cu_ohm_km(s, temp_c)
+    par = AMP.parametros(c)
+    t_cond = AMP.temp_conductor(par, temp_c)
+    r = AMP.resistencia_ohm_km(s, par["material"], t_cond)
     x = CO.X_CABLE_OHM_KM
     un = u if fases == 3 else u / math.sqrt(3)
     du = 0.0 if largo == 0 else VDG.caida_tension(fases, ib, largo, r, x, fp, un)["delta_u_pct"]
     rc, xc = SC.impedance_cable(r, x, largo)
     return {
         "u": u, "icc": icc, "fases": fases, "fp": fp, "largo": largo, "ib": ib,
-        "in": reg["In"], "s": s, "iz": CO.iz_admisible(s, 3 if fases == 3 else 2),
+        "in": reg["In"], "s": s, "iz": AMP.iz(par, s, fases), "par": par, "t_cond": t_cond,
         "r": r, "x": x, "du": du, "limite": VD.limite_caida_pct(P._LIMITE["seccional"]),
         "i_min": P.current_sc_min(u, icc, rc, xc, fases), "k": k_magnetico,
         "smin": CO.section_min_circuit(P._SECCION_MIN["seccional"]),
@@ -114,7 +117,9 @@ def memoria_calculo(tablero, c, v, proyecto):
         ("Factor de potencia", fp_txt),
         ("Longitud del tendido", f"{_sig2(v['largo'])} m"),
         ("Tipo de cable", c.get("CABLE_TIPO") or "Pendiente"),
-        ("Temperatura de servicio", "70 °C"),
+        ("Aislación / material", f"{v['par']['aislacion'].upper()} / {v['par']['material'].upper()}"),
+        ("Método de instalación", f"{v['par']['metodo']} · {v['par']['ternas']} terna(s) · {v['par']['agrup']} circuito(s) agrupados"),
+        ("Temperatura de servicio", f"{_sig2(v['t_cond'])} °C"),
     ])
     r_txt = f"{v['r']:.4f}".replace('.', ',')
     chk = _checks(v)
@@ -146,7 +151,7 @@ Dimensionar y verificar el alimentador principal del tablero. Los demás circuit
 - Poder de corte: icu ≥ Icc en barras.
 
 ## Etapa 4 – Selección de la sección
-- Sección elegida: S = {_mm(v['s'])} mm² de cobre; Iz = {_sig2(v['iz'])} A según tabla 771.16.I.
+- Sección elegida: S = {_mm(v['s'])} mm² de {'cobre' if v['par']['material'] == 'cu' else 'aluminio'} ({v['par']['aislacion'].upper()}, método {v['par']['metodo']}); Iz = {_sig2(v['iz'])} A según tablas 771.16.
 - Resistencia a 70 °C: R = {r_txt} Ω/km; reactancia X = 0,08 Ω/km.
 - Caída de tensión: ΔU = k · I · L · (R · cos φ + X · sen φ) / U, con I = Ib = {_sig2(v['ib'])} A y L = {_sig2(v['largo'])} m → ΔU = {_p1(v['du'])} %.
 - Pendiente: factores de agrupamiento y de temperatura (k) no aplicados; el cálculo usa la tabla vigente a 40 °C.
@@ -171,7 +176,7 @@ def sintesis_proyecto(c, v, proyecto):
     chk = _checks(v)
     global_ok = all(ok for *_, ok in chk)
     filas = "\n".join([
-        f"| Capacidad de conducción (771) | Cu {_mm(v['s'])} mm², Iz {_sig2(v['iz'])} A ≥ In {_sig2(v['in'])} A |",
+        f"| Capacidad de conducción (771) | {v['par']['material'].capitalize()} {_mm(v['s'])} mm², Iz {_sig2(v['iz'])} A ≥ In {_sig2(v['in'])} A |",
         f"| Caída de tensión (771.19) | ΔU {_p1(v['du'])} % ≤ {_p1(v['limite'])} % |",
         f"| Protección y poder de corte (90909-1) | {v['disp']}, icu {_sig2(v['icu'])} kA ≥ Icc {_sig2(v['icc'])} kA |",
         f"| Disparo magnético | Icc mín {_sig2(v['i_min'])} A ≥ {v['k']}·In |",

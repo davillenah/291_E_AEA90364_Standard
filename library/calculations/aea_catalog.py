@@ -35,6 +35,11 @@ MODULES = {
     "aea_icc_decay": ("κ, μ, λ, q, m, n (Icc)", "AEA IT 90909-1 §2.4–2.8"),
     "aea_special_locations": ("Baños (701) y vehículos eléctricos (722)", "AEA 701, 722"),
     "aea_pipeline": ("Excel de circuitos → dimensionado → JSON", "AEA 771 §13, §16, §19.7"),
+    "aea_tables": ("Tablas de capacidad de cables y factores de corrección", "AEA 771 §16 (771.16.I a XI)"),
+    "aea_ampacity": ("Capacidad de conducción por aislación, material y método", "AEA 771 §16, §13; IEC 60228"),
+    "aea_rules": ("Reglas de ingeniería (alturas, reservas, llenado, circuitos)", "AEA 771, 770, 701, 722"),
+    "aea_protection": ("Protección contra contactos indirectos (TN/TT/IT) e I2", "AEA 4-41, 4-43, 771.18"),
+    "aea_feeder_report": ("Memoria de cálculo y síntesis del alimentador principal", "AEA 771 §13, §16, §19.7, §18"),
     "aea_export": ("Exportación del cálculo a JSON (sin PDF)", "Contrato con sld-generator"),
 }
 #: Funciones equivalentes que viven en módulos anteriores (no se duplican).

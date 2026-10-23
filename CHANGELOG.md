@@ -7,6 +7,17 @@ y el proyecto usa [Versionado Semántico](https://semver.org/lang/es/).
 
 ## [Unreleased]
 
+### Añadido
+
+- `library/calculations/rules/`: 177 reglas de ingeniería en JSON por subgrupo, cada una con cláusula, página y cita verificada; módulo `aea_rules.py`. Las 106 de la Parte 7 (771, 770, 701, 722) se comprueban contra el texto del PDF.
+- Reglas de las Partes 4 y 5 (escaneadas, por OCR): puesta a tierra (Ra ≤ 40 Ω, Tablas 54.1 a 54.3), conductores de protección y equipotenciales (Tablas 54.5 a 54.10), colores, secciones mínimas y neutro (Tabla 52.24, 524), caída de tensión (525), curvas de cañerías (Tablas 52.11 y 52.12), protección contra sobrecargas (43) y contra choques (41). Cada regla indica si se comprobó por OCR o sobre la imagen de la página.
+- `aea_tables.json` y `aea_tables.py`: tablas 771.16 de capacidad de cables (I, III, V, VI, VIII, XI) y factores de corrección (II, IV, VII, IX, X) extraídos de los PDF y verificados contra su texto, con consultas e interpolación.
+- `aea_protection.py`: I2 convencional, In máxima por Iz y verificaciones TN, TT e IT.
+- `aea_ampacity.py`: Iz según aislación, material, método de instalación, clase, ternas, agrupamiento y temperaturas; el cálculo y la MC/SP usan estos datos.
+- Plantilla `src/input_motor_AEA_V2.xlsx` (y `make_template.py`) con columnas ordenadas por grupos, método de instalación por descripción, clase 5 por defecto y formato sobrio; el Excel original no se modifica.
+- Carpeta `docs/` con la descripción paso a paso del cálculo (00 a 09); el README enlaza a cada paso.
+- README resumido: descripción del cálculo y enlaces a `docs/`.
+
 ### Eliminado
 
 - Logo y material del proyecto de láminas IRAM, espejos de `assets/calculations/` y `test/`, carpetas vacías y carpetas legacy de las skills.

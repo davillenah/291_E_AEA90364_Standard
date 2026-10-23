@@ -48,6 +48,7 @@ import sys
 import zipfile
 import xml.etree.ElementTree as ET
 
+import aea_ampacity as AMP
 import aea_conductors as CO
 import aea_export as EX
 import aea_voltage_drop as VD
@@ -334,23 +335,33 @@ def calculate(tablero, circuitos, margen_iz=1.0, eta_motores=False, temp_c=70.0,
         un_du = u if fases == 3 else u / math.sqrt(3)
         limite = VD.limite_caida_pct(_LIMITE[tipo])
         smin = CO.section_min_circuit(_SECCION_MIN[tipo])
-        elegida, du_prop = None, 0.0
+        par = AMP.parametros(c)
+        t_cond = AMP.temp_conductor(par, temp_c)
+        elegida, du_prop, ultimo_error = None, 0.0, None
         for s in SERIE_S_MM2:
             if s < smin:
                 continue
-            if CO.iz_admisible(s, 3 if fases == 3 else 2) < margen_iz * in_a:
+            if not AMP.seccion_valida(par, s):
+                continue
+            try:
+                iz_s = AMP.iz(par, s, fases)
+            except ValueError as e:
+                ultimo_error = str(e)
+                continue
+            if iz_s < margen_iz * in_a:
                 continue
             du_prop = 0.0 if largo == 0 else VDG.caida_tension(
-                fases, i_du, largo, CO.resistencia_cu_ohm_km(s, temp_c), CO.X_CABLE_OHM_KM, fp, un_du)["delta_u_pct"]
+                fases, i_du, largo, AMP.resistencia_ohm_km(s, par["material"], t_cond), CO.X_CABLE_OHM_KM, fp, un_du)["delta_u_pct"]
             if du_prop <= limite and base + du_prop <= DU_ACUM_MAX_PCT:
                 elegida = s
                 break
         if elegida is None:
             elegida = SERIE_S_MM2[-1]
-            avisos.append(f"{tag}: ninguna sección ≤ {elegida} mm² cumple Iz/caída (In {in_a} A, ΔU {du_prop:.2f} %): usar paralelo")
+            avisos.append(f"{tag}: ninguna sección ≤ {elegida} mm² cumple Iz/caída (In {in_a} A, ΔU {du_prop:.2f} %): usar paralelo"
+                          + (f" [{ultimo_error}]" if ultimo_error else ""))
         du_acum[tag] = base + du_prop
         rp, xp = z_acum[padre] if padre else (0.0, 0.0)
-        rc, xc = SC.impedance_cable(CO.resistencia_cu_ohm_km(elegida, temp_c), CO.X_CABLE_OHM_KM, largo)
+        rc, xc = SC.impedance_cable(AMP.resistencia_ohm_km(elegida, par["material"], t_cond), CO.X_CABLE_OHM_KM, largo)
         z_acum[tag] = (rp + rc, xp + xc)
         kind = str(c.get("KIND") or "").strip().lower()
         if kind != "rccb":
