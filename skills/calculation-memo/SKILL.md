@@ -1,6 +1,6 @@
 ---
 name: "calculation-memo"
-description: "Exports all circuits to <PROJECT>_calculo.json (for sld-generator) and writes the Memoria de Calculo (<PROJECT>_MC.md) of the board's main feeder, in the aea90364-feeder-sizing format. Markdown only, never PDF or Word. Runs after electrical-dimensioning."
+description: "Exports all circuits to PROJECT_calculo.json (for sld-generator) and writes the Memoria de Calculo (PROJECT_MC.md) of the board's main feeder, in the aea90364-feeder-sizing format. Markdown only, never PDF or Word. Runs after electrical-dimensioning."
 ---
 
 # Calculation memo skill (JSON + MC of the main feeder)

@@ -1,6 +1,6 @@
 ---
 name: "memo-summary"
-description: "Writes the Sintesis de Proyecto (<PROJECT>_SP.md) of the board's main feeder: one page, requirement | technical data, at most three observations. Runs after calculation-memo. Markdown only, never PDF or Word."
+description: "Writes the Sintesis de Proyecto (PROJECT_SP.md) of the board's main feeder: one page, requirement | technical data, at most three observations. Runs after calculation-memo. Markdown only, never PDF or Word."
 ---
 
 # Project summary skill (SP of the main feeder)

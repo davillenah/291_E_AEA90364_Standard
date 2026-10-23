@@ -9,6 +9,10 @@ y el proyecto usa [Versionado Semántico](https://semver.org/lang/es/).
 
 ## [1.6.0] - 2026-10-22
 
+### Corregido
+
+- Descripciones de las skills `calculation-memo` y `memo-summary`: sin etiquetas XML (`<PROJECT>`), que la validación del plugin rechazaba.
+
 ### Añadido
 
 - `library/calculations/rules/`: 177 reglas de ingeniería en JSON por subgrupo, cada una con cláusula, página y cita verificada; módulo `aea_rules.py`. Las 106 de la Parte 7 (771, 770, 701, 722) se comprueban contra el texto del PDF.
