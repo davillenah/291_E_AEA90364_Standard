@@ -29,6 +29,7 @@ El cálculo completo, paso a paso, está en la carpeta [`docs/`](docs/00-dimensi
 - [08 · Salidas](docs/08-salidas.md): JSON, Memoria de Cálculo y Síntesis de Proyecto.
 - [09 · Tablas normativas](docs/09-tablas-normativas.md): tablas de la norma incorporadas, su verificación y lo que falta.
 - [10 · Reglas de ingeniería](docs/10-reglas-de-ingenieria.md): alturas de tomacorrientes e interruptores, reservas, llenado, circuitos, baños, puesta a tierra, conductores de protección, colores, protección contra choques y sobrecorrientes, en JSON por subgrupo.
+- [11 · Pendientes](docs/11-pendientes.md): lo que falta o hay que confirmar, con prioridad y estado.
 
 ## Uso
 

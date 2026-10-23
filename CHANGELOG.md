@@ -17,6 +17,7 @@ y el proyecto usa [Versionado Semántico](https://semver.org/lang/es/).
 - Plantilla `src/input_motor_AEA_V2.xlsx` (y `make_template.py`) con columnas ordenadas por grupos, método de instalación por descripción, clase 5 por defecto y formato sobrio; el Excel original no se modifica.
 - Carpeta `docs/` con la descripción paso a paso del cálculo (00 a 09); el README enlaza a cada paso.
 - README resumido: descripción del cálculo y enlaces a `docs/`.
+- `docs/11-pendientes.md`: tabla de pendientes con prioridad y estado.
 
 ### Eliminado
 
