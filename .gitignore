@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Salidas generadas (se regeneran en cada corrida)
+src/*_calculo.json
+src/*_MC.md
+src/*_SP.md
+
+# Copias de trabajo y respaldos
+*.bak
+*.bak.*
+*.orig
+
+# Archivos temporales de Office
+~$*.xlsx
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Normas AEA en PDF: no se versionan (tamaño y licencia)
+assets/*.pdf
+library/calculations/assets/
